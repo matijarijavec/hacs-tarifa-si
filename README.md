@@ -17,4 +17,4 @@ Add the following to your `configuration.yaml` file:
 ```yaml
 sensor:
   - platform: tarifa_si
-    scan_interval: 60  # Update every 60 seconds (change this value as needed)
+    scan_interval: 3600  # Update every hour (change this value as needed)
