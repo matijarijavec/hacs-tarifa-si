@@ -1,0 +1,9 @@
+{
+  "domain": "tarifa_si",
+  "name": "Tarifa SI",
+  "version": "1.0.0",
+  "documentation": "https://github.com/matijarijavec/hass-tarifa-si",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": ["@matijarijavec"]
+}
