@@ -1,0 +1,21 @@
+{
+  "config": {
+    "title": "Tarifa SI",
+    "description": "Integration for Tarifa SI API",
+    "update_interval": "Update interval (in seconds)"
+  },
+  "sensor": {
+    "tarifa": {
+      "name": "Tarifa",
+      "state": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "season": {
+        "low": "Low Season",
+        "high": "High Season"
+      }
+    }
+  }
+}
