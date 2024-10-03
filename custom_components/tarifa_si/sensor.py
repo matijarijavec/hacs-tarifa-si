@@ -14,9 +14,13 @@ URL = "https://www.tarifa.si/api/tarifa/trenutna"
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
+
+    # Get the scan interval from the configuration, default to SCAN_INTERVAL
+    scan_interval = config.get("scan_interval", SCAN_INTERVAL)
+
     # Create the tariff sensor
     data = TarifaSiData()
-    add_entities([TarifaSiSensor(data)], True)
+    add_entities([TarifaSiSensor(data, scan_interval)], True)
 
 
 class TarifaSiData:
@@ -40,11 +44,17 @@ class TarifaSiData:
 class TarifaSiSensor(SensorEntity):
     """Representation of the tarifa_si sensor."""
 
-    def __init__(self, data):
+    def __init__(self, data, scan_interval):
         """Initialize the sensor."""
         self._data = data
         self._state = None
         self._attributes = {}
+        self._scan_interval = scan_interval  # Store the scan interval
+
+    @property
+    def scan_interval(self):
+        """Return the scan interval for this sensor."""
+        return self._scan_interval
 
     @property
     def name(self):
