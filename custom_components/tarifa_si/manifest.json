@@ -5,5 +5,6 @@
   "documentation": "https://github.com/matijarijavec/hass-tarifa-si",
   "requirements": [],
   "dependencies": [],
-  "codeowners": ["@matijarijavec"]
+  "codeowners": ["@matijarijavec"],
+  "iot_class": "cloud_polling"
 }
