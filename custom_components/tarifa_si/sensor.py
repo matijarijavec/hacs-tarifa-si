@@ -6,6 +6,7 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
+# Set the update interval (every 1 minute)
 SCAN_INTERVAL = timedelta(minutes=1)
 
 URL = "https://www.tarifa.si/api/tarifa/trenutna"
@@ -15,7 +16,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
     # Create the tariff sensor
     data = TarifaSiData()
-    add_entities([TarifaSiSensor(data)])
+    add_entities([TarifaSiSensor(data)], True)
 
 
 class TarifaSiData:
@@ -29,6 +30,7 @@ class TarifaSiData:
         """Fetch the data from the API."""
         try:
             response = requests.get(URL)
+            response.raise_for_status()  # Raise an error for bad responses
             self.data = response.json()
         except Exception as e:
             _LOGGER.error(f"Failed to fetch data from {URL}: {e}")
@@ -63,6 +65,16 @@ class TarifaSiSensor(SensorEntity):
     def extra_state_attributes(self):
         """Return the other key/values as attributes."""
         return self._attributes
+
+    @property
+    def unique_id(self):
+        """Return a unique identifier for this sensor."""
+        return "tarifa_si_sensor"
+
+    @property
+    def scan_interval(self):
+        """Return the scan interval for this sensor."""
+        return SCAN_INTERVAL
 
     def update(self):
         """Fetch new state data for the sensor."""
