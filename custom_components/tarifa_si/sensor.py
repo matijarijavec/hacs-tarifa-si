@@ -78,6 +78,11 @@ class TarifaSiSensor(SensorEntity):
         self._attributes = {}
 
     @property
+    def unique_id(self):
+        """Return a unique ID for the sensor."""
+        return "tarifa_si_sensor"  # Change this to whatever unique ID you prefer
+
+    @property
     def name(self):
         """Return the name of the sensor."""
         return "Tarifa SI Sensor"
