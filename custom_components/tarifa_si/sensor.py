@@ -6,7 +6,7 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
-# Default scan interval
+# Default scan interval (every 5 minutes)
 DEFAULT_SCAN_INTERVAL = timedelta(minutes=5)
 
 URL = "https://www.tarifa.si/api/tarifa/trenutna"
@@ -14,16 +14,19 @@ URL = "https://www.tarifa.si/api/tarifa/trenutna"
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
-    # Get the scan interval from the configuration, or default to DEFAULT_SCAN_INTERVAL
-    scan_interval = config.get("scan_interval", DEFAULT_SCAN_INTERVAL)
+    # Get the scan interval from the configuration (in seconds), or default to 300 seconds
+    scan_interval_seconds = config.get("scan_interval", 300)
+    
+    # Convert the scan interval into a timedelta
+    scan_interval = timedelta(seconds=scan_interval_seconds)
 
     # Create the tariff sensor with the scan interval
     data = TarifaSiData()
     add_entities([TarifaSiSensor(data)], True)
 
-    # Override the SCAN_INTERVAL in the config with what is provided in configuration.yaml
+    # Set the global SCAN_INTERVAL based on configuration or default
     global SCAN_INTERVAL
-    SCAN_INTERVAL = timedelta(seconds=scan_interval)
+    SCAN_INTERVAL = scan_interval
 
 
 class TarifaSiData:
@@ -45,7 +48,6 @@ class TarifaSiData:
                 self.data = response.json()
             else:
                 _LOGGER.warning(f"Received empty response from {URL}")
-                # Do not update the data if the response is empty
                 return
 
         except requests.exceptions.Timeout:
@@ -95,7 +97,6 @@ class TarifaSiSensor(SensorEntity):
         """Fetch new state data for the sensor."""
         self._data.update()
 
-        # Only update state and attributes if data was successfully fetched
         if self._data.data is not None:
             # Set the main state as the 'tariff' value
             self._state = self._data.data.get("tariff")
