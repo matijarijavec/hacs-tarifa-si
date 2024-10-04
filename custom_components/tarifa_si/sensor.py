@@ -6,8 +6,8 @@ import logging
 
 _LOGGER = logging.getLogger(__name__)
 
-# Set the update interval (every 1 minute)
-SCAN_INTERVAL = timedelta(minutes=1)
+# Set the update interval (every 2 minutes)
+SCAN_INTERVAL = timedelta(minutes=2)
 
 URL = "https://www.tarifa.si/api/tarifa/trenutna"
 
@@ -33,12 +33,30 @@ class TarifaSiData:
     def update(self):
         """Fetch the data from the API."""
         try:
-            response = requests.get(URL)
+            # Attempt to fetch data from the API
+            response = requests.get(URL, timeout=10)
             response.raise_for_status()  # Raise an error for bad responses
-            self.data = response.json()
-        except Exception as e:
+
+            # Check if the response is empty
+            if response.content:
+                self.data = response.json()
+            else:
+                _LOGGER.warning(f"Received empty response from {URL}")
+                # Do not update the data if the response is empty
+                return
+
+        except requests.exceptions.Timeout:
+            # Handle timeout error
+            _LOGGER.error(f"Timeout error when fetching data from {URL}")
+            return
+        except requests.exceptions.RequestException as e:
+            # Handle all other requests-related errors
             _LOGGER.error(f"Failed to fetch data from {URL}: {e}")
-            self.data = None
+            return
+        except ValueError as e:
+            # Handle JSON decode errors (e.g., malformed JSON)
+            _LOGGER.error(f"Failed to parse JSON from {URL}: {e}")
+            return
 
 
 class TarifaSiSensor(SensorEntity):
@@ -81,14 +99,11 @@ class TarifaSiSensor(SensorEntity):
         """Return a unique identifier for this sensor."""
         return "tarifa_si_sensor"
 
-    @property
-    def scan_interval(self):
-        """Return the scan interval for this sensor."""
-        return SCAN_INTERVAL
-
     def update(self):
         """Fetch new state data for the sensor."""
         self._data.update()
+
+        # Only update state and attributes if data was successfully fetched
         if self._data.data is not None:
             # Set the main state as the 'tariff' value
             self._state = self._data.data.get("tariff")
