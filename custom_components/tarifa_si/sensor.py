@@ -14,11 +14,15 @@ URL = "https://www.tarifa.si/api/tarifa/trenutna"
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the sensor platform."""
-    # Get the scan interval from the configuration (in seconds), or default to 300 seconds
+    # Get the scan interval from the configuration (in seconds) or default to 300 seconds
     scan_interval_seconds = config.get("scan_interval", 300)
-    
+
+    # Ensure the scan interval is an integer (seconds)
+    if isinstance(scan_interval_seconds, timedelta):
+        scan_interval_seconds = scan_interval_seconds.total_seconds()
+
     # Convert the scan interval into a timedelta
-    scan_interval = timedelta(seconds=scan_interval_seconds)
+    scan_interval = timedelta(seconds=int(scan_interval_seconds))
 
     # Create the tariff sensor with the scan interval
     data = TarifaSiData()
