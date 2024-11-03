@@ -1,6 +1,6 @@
 {
-  "name": "Tarifa SI",
-  "description": "Tarifa SI",
+  "name": "Electricity Block Tariff (SI)",
+  "description": "Retrieves and displays real-time electricity block tariff information from tarifa.si for Slovenian consumers.",
   "domain": "tarifa_si",
   "repo": "https://github.com/matijarijavec/hass-tarifa-si",
   "documentation": "https://github.com/matijarijavec/hass-tarifa-si/blob/main/README.md",

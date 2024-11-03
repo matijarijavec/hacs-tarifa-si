@@ -1,7 +1,7 @@
 {
   "config": {
-    "title": "Tarifa SI",
-    "description": "Integration for Tarifa SI API",
+    "title": "Electricity Block Tariff (SI)",
+    "description": "Retrieves and displays real-time electricity block tariff information from tarifa.si for Slovenian consumers.",
     "update_interval": "Update interval (in seconds)"
   },
   "sensor": {

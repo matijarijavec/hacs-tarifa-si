@@ -85,7 +85,7 @@ class TarifaSiSensor(SensorEntity):
     @property
     def name(self):
         """Return the name of the sensor."""
-        return "Tarifa SI Sensor"
+        return "Electricity Block Tariff Sensor"
 
     @property
     def state(self):
