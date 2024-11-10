@@ -9,3 +9,12 @@ Retrieves and displays real-time electricity block tariff information from [tari
 3. Add this repository URL: `https://github.com/matijarijavec/hacs-tarifa-si`.
 4. Choose **Integration** as the category.
 5. After adding the repository, find **Electricity Block Tariff (SI)** in HACS and install it.
+
+---
+
+After installing, add the following configuration to your `configuration.yaml` file:
+```yaml
+sensor:
+  - platform: tarifa_si
+    name: Electricity Block Tariff (SI)
+```
