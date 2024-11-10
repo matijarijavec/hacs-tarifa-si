@@ -2,7 +2,7 @@
   "domain": "tarifa_si",
   "name": "Electricity Block Tariff (SI)",
   "version": "1.0.1",
-  "documentation": "https://github.com/matijarijavec/hass-tarifa-si",
+  "documentation": "https://github.com/matijarijavec/hacs-tarifa-si",
   "requirements": [],
   "dependencies": [],
   "codeowners": ["@matijarijavec"],
